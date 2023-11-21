@@ -157,6 +157,12 @@ bool search_course(Course **&course_array, const unsigned int course_id,
 bool add_course(Course **&course_array, const unsigned int course_id,
                 const char name[MAX_TITLE], unsigned int &num_courses) {
   // TODO: Write code to implement add_course
+  int i;
+  const int length = sizeof(course_array)/sizeof(Course);
+  if(search_course(course_array, course_id, num_courses,i)){return false;}
+  else if(length<MAX_RANKING_STARS){
+    
+  }
   cout << "increase course array size to " << num_courses << endl;
   return false;
 }
