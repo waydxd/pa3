@@ -158,12 +158,33 @@ bool add_course(Course **&course_array, const unsigned int course_id,
                 const char name[MAX_TITLE], unsigned int &num_courses) {
   // TODO: Write code to implement add_course
   int i;
-  const int length = sizeof(course_array)/sizeof(Course);
   if(search_course(course_array, course_id, num_courses,i)){return false;}
-  else if(length<MAX_RANKING_STARS){
-    
+  else{ //detect if there exist null pointers
+    for(int i = 0;i<num_courses;i++){
+      if(course_array==nullptr){
+        course_array[i]->course_id == course_id;
+        course_array[i]->name == name;
+        course_array[i]->star_rank_head == nullptr;
+        course_array[i]->stars_count == 0;
+        return true;
+      }
+    }
+    num_courses *= 2;
+    Course **new_course_array = new Course *[num_courses];
+    for (int i = 0; i < num_courses/2; i++){
+      new_course_array[i] = course_array[i];
+    }
+    for (int i = num_courses/2; i < num_courses; i++){
+      new_course_array[i] = nullptr;
+    }
+    new_course_array[num_courses/2]->course_id == course_id;
+    new_course_array[num_courses/2]->name == name;
+    new_course_array[num_courses/2]->star_rank_head == nullptr;
+    new_course_array[num_courses/2]->stars_count == 0;
+    delete[] course_array;
+    course_array = new_course_array;
+    cout << "increase course array size to " << num_courses << endl;
   }
-  cout << "increase course array size to " << num_courses << endl;
   return false;
 }
 
@@ -201,6 +222,26 @@ bool add_star_rank(Student *&student_head, unsigned int sid,
 bool add_student(Student *&student_head, const unsigned int sid,
                  const char name[MAX_TITLE]) {
   // TODO: Write code to implement add_student
+  Student *prev, *current;
+  current = student_head;
+  prev = nullptr;
+  if(search_student(student_head, sid, prev, current)){return false;}
+  else{
+    Student *new_student = new Student;
+    new_student->sid = sid;
+    strcpy(new_student->name, name);
+    new_student->ranks_count = 0;
+    new_student->next = nullptr;
+    if(prev == nullptr){
+      new_student->next = student_head;
+      student_head = new_student;
+    }
+    else{
+      prev->next = new_student;
+      new_student->next = current;
+    }
+    return true;
+  }
   return false;
 }
 
@@ -290,8 +331,19 @@ void display_students(Student *student_head) {
   cout << "=== Student List ([sid, name, star_rank count]) ===" << endl;
   
   // TODO: Write the code to display students
-
-  cout << "No items in the Student list" << endl; // Use this when no student exists
+  if(student_head == nullptr){
+    cout << "No items in the Student list" << endl; // Use this when no student exists
+    return;
+  }
+  else{
+    Student *current = student_head;
+    cout << "[" << current->sid << ", " << current->name << ", " << current->ranks_count << "] ";
+    while(current != nullptr){
+      cout << "-> [" << current->sid << ", " << current->name << ", " << current->ranks_count << "] ";
+      current = current->next;
+    }
+    cout << endl;
+  }
 }
 
 //Display star ranks of the course given its id.
@@ -323,7 +375,23 @@ void display_star_ranks(Course **course_array, const unsigned int num_courses,
 void display_courses(Course **course_array, const unsigned int num_courses) {
   // TODO: Write the code to display students
   // If there is no course in the list, use the following cout:
-  cout << "No course in the list " << endl;
+  if(course_array==nullptr){
+    cout << "No course in the list " << endl;
+  }
+  else{
+    for(int i = 0; i<num_courses; i++){
+      if(course_array[i]==nullptr){break;}
+      cout << "course_id : " << course_array[i]->course_id << ", name : " << course_array[i]->name << ", star_count:" << endl;
+      for(int j = 0; j<MAX_RANKING_STARS;j++){
+        for(int k = 0;k<MAX_RANKING_STARS;k++){
+          if(k<=0){
+            cout << "*";
+          }else{cout << " ";}
+        }
+        cout << course_array[i]->stars_count[j] << endl;
+      }
+    }
+  }
 }
 
 // === Region: The main function ===
