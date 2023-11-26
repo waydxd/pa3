@@ -171,7 +171,12 @@ bool add_course(Course **&course_array, const unsigned int course_id,
     Course **new_course_array = new Course *[num_courses];
     new_course_array = dynamic_init_course_array(num_courses);
     copy(course_array, course_array + num_courses/2, new_course_array);
-    new_course_array[i] = create_course(course_id, name);
+    new_course_array[i]->course_id = course_id;
+    strcpy(new_course_array[i]->name, name);
+    for (int i = 0; i < MAX_RANKING_STARS; i++) {
+      new_course_array[i]->stars_count[i] = 0;
+    }
+    new_course_array[i]->star_rank_head = nullptr;
     delete[] course_array;
     course_array = new_course_array;
     cout << "increase course array size to " << num_courses << endl;
