@@ -163,8 +163,8 @@ bool add_course(Course **&course_array, const unsigned int course_id,
   else{ //detect if there exist null pointers
     for(int i = 0;i<num_courses;i++){
       if(*(course_array+i)==nullptr){  
-        course_array[i] = create_course(course_id, name);
         delete course_array[i];
+        course_array[i] = create_course(course_id, name);
         return true;
       }
     }
