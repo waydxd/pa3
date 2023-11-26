@@ -352,6 +352,7 @@ bool delete_course(Student *student_head, Course **&course_array,
     for(int j = i; j<num_courses-1;j++){
       course_array[j] = course_array[j+1];
     }
+    delete course_array[num_courses-1];
     course_array[num_courses-1] = nullptr;
     if(num_courses<=3){
       return true;
