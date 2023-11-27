@@ -350,6 +350,7 @@ bool delete_course(Student *student_head, Course **&course_array,
       course_array[j] = course_array[j+1];
     }
     course_array[num_courses-1] = nullptr;
+    delete course_array[num_courses-1]; //newly added
     if(num_courses<=3){
       return true;
     }else{
