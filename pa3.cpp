@@ -20,6 +20,7 @@
 // Necessary header files are included,
 // DO NOT include extra header files
 // ============================
+#include <cstddef>
 #include <cstring>
 #include <iomanip>
 #include <iostream>
@@ -160,19 +161,22 @@ bool add_course(Course **&course_array, const unsigned int course_id,
   int i;  
   if(search_course(course_array, course_id, num_courses,i)){return false;}
   else{ //detect if there exist null pointers
-    if(course_array[i]==nullptr){  
+    if(i==num_courses){
+      num_courses *= 2;
+      Course **new_course_array = nullptr;
+      new_course_array = dynamic_init_course_array(num_courses);
+      copy(course_array, course_array + num_courses/2, new_course_array); //risky
+      new_course_array[i] = create_course(course_id, name);
+      delete[] course_array;
+      course_array = new_course_array;
+      cout << "increase course array size to " << num_courses << endl;
+      return true;
+    }  
+    else{  
         course_array[i] = create_course(course_id, name);
         return true;
     }
-    num_courses *= 2;
-    Course **new_course_array = nullptr;
-    new_course_array = dynamic_init_course_array(num_courses);
-    copy(course_array, course_array + num_courses/2, new_course_array); //risky
-    new_course_array[i] = create_course(course_id, name);
-    delete[] course_array;
-    course_array = new_course_array;
-    cout << "increase course array size to " << num_courses << endl;
-    return true;
+    
   }
   return false;
 }
@@ -346,17 +350,22 @@ bool delete_course(Student *student_head, Course **&course_array,
     while(course_array[i]->star_rank_head != nullptr){
       delete_star_rank(student_head, course_array, course_array[i]->star_rank_head->student->sid, course_id, num_courses);
     }
-    for(int j = i; j<num_courses-1;j++){
+    
+    int j = i;
+    delete course_array[i];
+    for(; j<num_courses-1;j++){
       course_array[j] = course_array[j+1];
     }
-    course_array[num_courses-1] = nullptr;
-    delete course_array[num_courses-1]; //newly added
-    if(num_courses<=3){
-      return true;
-    }else{
-      num_courses/=2;
+    course_array[j] = nullptr;
+    int validArr = 0;
+    while(course_array[validArr]!=nullptr){
+      validArr++;
     }
-  cout << "reduce course array size to " << num_courses << endl;
+    if(validArr>num_courses/2||num_courses<=3){return true;}
+    else {
+    num_courses /=2;
+    cout << "reduce course array size to " << num_courses << endl;
+    }
   return true;
   }
   return false;
