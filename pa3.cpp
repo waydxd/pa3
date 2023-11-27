@@ -165,7 +165,7 @@ bool add_course(Course **&course_array, const unsigned int course_id,
         return true;
     }
     num_courses *= 2;
-    Course **new_course_array = new Course *[num_courses];
+    Course **new_course_array = nullptr;
     new_course_array = dynamic_init_course_array(num_courses);
     copy(course_array, course_array + num_courses/2, new_course_array); //risky
     new_course_array[i] = create_course(course_id, name);
