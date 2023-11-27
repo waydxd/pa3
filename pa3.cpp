@@ -158,12 +158,10 @@ bool add_course(Course **&course_array, const unsigned int course_id,
                 const char name[MAX_TITLE], unsigned int &num_courses) {
   // TODO: Write code to implement add_course
   int i;  
-  //cout << search_course(course_array, course_id, num_courses,i) << endl;
   if(search_course(course_array, course_id, num_courses,i)){return false;}
   else{ //detect if there exist null pointers
     for(int i = 0;i<num_courses;i++){
       if(*(course_array+i)==nullptr){  
-        delete course_array[i];
         course_array[i] = create_course(course_id, name);
         return true;
       }
@@ -172,12 +170,7 @@ bool add_course(Course **&course_array, const unsigned int course_id,
     Course **new_course_array = new Course *[num_courses];
     new_course_array = dynamic_init_course_array(num_courses);
     copy(course_array, course_array + num_courses/2, new_course_array);
-    new_course_array[i]->course_id = course_id;
-    strcpy(new_course_array[i]->name, name);
-    for (int i = 0; i < MAX_RANKING_STARS; i++) {
-      new_course_array[i]->stars_count[i] = 0;
-    }
-    new_course_array[i]->star_rank_head = nullptr;
+    new_course_array[i] = create_course(course_id, name);
     delete[] course_array;
     course_array = new_course_array;
     cout << "increase course array size to " << num_courses << endl;
@@ -358,8 +351,8 @@ bool delete_course(Student *student_head, Course **&course_array,
     for(int j = i; j<num_courses-1;j++){
       course_array[j] = course_array[j+1];
     }
-    delete course_array[num_courses-1];
     course_array[num_courses-1] = nullptr;
+    delete course_array[num_courses-1];
     if(num_courses<=3){
       return true;
     }else{
