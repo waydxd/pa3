@@ -160,16 +160,14 @@ bool add_course(Course **&course_array, const unsigned int course_id,
   int i;  
   if(search_course(course_array, course_id, num_courses,i)){return false;}
   else{ //detect if there exist null pointers
-    for(int i = 0;i<num_courses;i++){
-      if(*(course_array+i)==nullptr){  
+    if(course_array[i]==nullptr){  
         course_array[i] = create_course(course_id, name);
         return true;
-      }
     }
     num_courses *= 2;
     Course **new_course_array = new Course *[num_courses];
     new_course_array = dynamic_init_course_array(num_courses);
-    copy(course_array, course_array + num_courses/2, new_course_array);
+    copy(course_array, course_array + num_courses/2, new_course_array); //risky
     new_course_array[i] = create_course(course_id, name);
     delete[] course_array;
     course_array = new_course_array;
@@ -352,7 +350,6 @@ bool delete_course(Student *student_head, Course **&course_array,
       course_array[j] = course_array[j+1];
     }
     course_array[num_courses-1] = nullptr;
-    delete course_array[num_courses-1];
     if(num_courses<=3){
       return true;
     }else{
