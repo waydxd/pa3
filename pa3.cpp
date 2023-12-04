@@ -208,7 +208,6 @@ bool add_star_rank(Student *&student_head, unsigned int sid,
     return false;
   }
   if(!search_course(course_array,course_id,num_courses,i)){
-    cout<< search_course(course_array,course_id,num_courses,i) << endl;
     cout << "Failed to find course " << course_id << " when add a star_rank." << endl;
     return false;
   }
