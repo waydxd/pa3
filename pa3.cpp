@@ -3,7 +3,7 @@
 //  COMP2011 Fall 2023
 //  PA3: A Simplified Version of USTSPAC
 //
-//  Your name: Chan Wing Yu 
+//  Your name: Cxxx Wxxx Yx
 //  Your ITSC email: wychancf@connect.ust.hk
 //
 //  Project TA: PAPPAS Christodoulos (cpappas@connect.ust.hk); 
